@@ -1,6 +1,5 @@
-// In a file like client/src/api/config.js
-const API_BASE_URL = window.location.hostname === 'localhost' 
-  ? 'http://localhost:5000' 
-  : 'https://clinicea-camomile-production.up.railway.app';
+// client/src/config.js
 
-export default API_BASE_URL;
+export const API_BASE_URL = window.location.hostname === 'localhost' 
+  ? 'http://localhost:5000/api' 
+  : 'https://clinicea-camomile-production.up.railway.app/api';
