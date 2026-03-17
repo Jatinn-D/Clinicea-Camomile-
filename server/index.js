@@ -10,7 +10,7 @@ dotenv.config();
 const app = express();
 
 // Middleware
-app.use(cors({ origin: 'https://your-react-app.vercel.app' }));
+app.use(cors({ origin: 'https://clinicea-camomile.vercel.app/' }));
 app.use(express.json());
 
 // Routes
