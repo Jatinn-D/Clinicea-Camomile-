@@ -1,7 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
-import pool from './config/db.js'; // This imports and tests your DB connection!
+import pool from './config/db.js'; 
 import appointmentRoutes from './routes/appointmentRoutes.js';
 import serviceRoutes from './routes/serviceRoutes.js';
 
@@ -9,14 +9,30 @@ dotenv.config();
 
 const app = express();
 
-// Middleware
-app.use(cors({ origin: 'https://clinicea-camomile.vercel.app/' }));
+// FIXED: Removed trailing slash and added local support for testing
+const allowedOrigins = [
+  'https://clinicea-camomile.vercel.app',
+  'http://localhost:5173', // Vite default
+  'http://localhost:3000'  // CRA default
+];
+
+app.use(cors({
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  credentials: true
+}));
+
 app.use(express.json());
 
 // Routes
-app.use('/api/appointments', appointmentRoutes); // Notice I tweaked this slightly for better organization!
+app.use('/api/appointments', appointmentRoutes); 
 app.use('/api/services', serviceRoutes);
-// server/index.js
+
 app.post('/api/appointments/lookup-email', async (req, res) => {
   const { email } = req.body;
   try {
@@ -30,13 +46,12 @@ app.post('/api/appointments/lookup-email', async (req, res) => {
   }
 });
 
-// Health Check
 app.get('/api/health', (req, res) => {
-    res.json({ message: "Server is perfectly organized and running smoothly!" });
+    res.json({ status: "ok", message: "Server is live on Railway!" });
 });
 
-// Start the server
+// Start the server - Railway provides the PORT
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
-    console.log(`🚀 Server is running on http://localhost:${PORT}`);
+app.listen(PORT, '0.0.0.0', () => {
+    console.log(`🚀 Server running on port ${PORT}`);
 });
