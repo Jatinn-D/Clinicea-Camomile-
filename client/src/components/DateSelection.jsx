@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { ChevronLeft, ChevronRight, Sun, Sunset, Moon } from "lucide-react";
+import { API_BASE_URL } from "../config";
 
 const DateSelection = ({
   onSelectionComplete,
@@ -35,7 +36,7 @@ const DateSelection = ({
 
     try {
       const response = await fetch(
-        `http://localhost:5000/api/appointments/slots?date=${targetDate}`,
+        `${API_BASE_URL}/appointments/slots?date=${targetDate}`,
       );
       if (!response.ok) throw new Error("Failed to fetch slots");
       const data = await response.json();
